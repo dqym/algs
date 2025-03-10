@@ -3,17 +3,13 @@
 #include <iostream>
 #include <vector>
 
-// Структура описывающая плитку
+// Структура, описывающая плитку
 struct Tile {
     const int rightEdge, bottomEdge;
     int posX, posY, sideLength;
 
     Tile(int x, int y, int len)
             : posX(x), posY(y), sideLength(len), rightEdge(x + len), bottomEdge(y + len) {}
-
-    Tile(const Tile &other)
-            : posX(other.posX), posY(other.posY), sideLength(other.sideLength),
-              rightEdge(other.rightEdge), bottomEdge(other.bottomEdge) {}
 
     Tile &operator=(const Tile &other) {
         if (this != &other) {
@@ -24,7 +20,6 @@ struct Tile {
         return *this;
     }
 };
-
 
 int gGridDim;                // нормированная размерность сетки
 int gUnitSize;               // единичный размер плитки
@@ -45,13 +40,13 @@ void adjustGridRatio() {
     gUnitSize = bestDiv;
     gGridDim /= bestDiv;
     if (DEBUG_MODE) {
-        std::cout << "[DEBUG] adjustGridRatio: bestDiv = " << bestDiv
-                  << ", gUnitSize = " << gUnitSize
-                  << ", normalized grid dimension = " << gGridDim << std::endl;
+        std::cout << "[DEBUG] adjustGridRatio: наилучший делитель = " << bestDiv
+                  << ", единичный размер плитки = " << gUnitSize
+                  << ", нормированная размерность сетки = " << gGridDim << std::endl;
     }
 }
 
-// Проверка накладывается ли новая плитка на уже размещённые
+// Проверка: накладывается ли новая плитка на уже размещённые
 bool overlapWithTiles(const std::vector<Tile> &tiles, int x, int y) {
     for (const auto &tile : tiles) {
         if (x >= tile.posX && x < tile.rightEdge &&
@@ -76,16 +71,16 @@ int findMaxTileSize(const std::vector<Tile> &tiles, int x, int y) {
 
 void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCount, int startX, int startY) {
     if (DEBUG_MODE) {
-        std::cout << "[DEBUG] backtrackTiles: tileCount = " << tileCount
-                  << ", filledArea = " << filledArea
-                  << ", startX = " << startX << ", startY = " << startY << std::endl;
+        std::cout << "[DEBUG] backtrackTiles: количество плиток = " << tileCount
+                  << ", заполненная площадь = " << filledArea
+                  << ", начальное X = " << startX << ", начальное Y = " << startY << std::endl;
     }
     if (filledArea == gGridDim * gGridDim) {
         if (tileCount < gMinTileCount) {
             gMinTileCount = tileCount;
             gOptimal = currentTiles;
             if (DEBUG_MODE) {
-                std::cout << "[DEBUG] Found complete tiling with tileCount = " << tileCount << std::endl;
+                std::cout << "[DEBUG] Найдена полная укладка с количеством плиток = " << tileCount << std::endl;
             }
         }
         return;
@@ -113,10 +108,10 @@ void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCou
                 }
 
                 if (DEBUG_MODE) {
-                    std::cout << "[DEBUG] Placing tile at (" << x << ", " << y
-                              << ") with side = " << len
-                              << ", newFilled = " << newFilled
-                              << ", tileCount = " << tileCount + 1 << std::endl;
+                    std::cout << "[DEBUG] Размещаем плитку в (" << x << ", " << y
+                              << ") со стороной = " << len
+                              << ", новая заполненная площадь = " << newFilled
+                              << ", количество плиток = " << tileCount + 1 << std::endl;
                 }
 
                 currentTiles.push_back(newTile);
@@ -125,8 +120,8 @@ void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCou
                         gMinTileCount = tileCount + 1;
                         gOptimal = currentTiles;
                         if (DEBUG_MODE) {
-                            std::cout << "[DEBUG] Complete tiling reached after placing tile at ("
-                                      << x << ", " << y << ") with side = " << len << std::endl;
+                            std::cout << "[DEBUG] Достигнута полная укладка после размещения плитки в ("
+                                      << x << ", " << y << ") со стороной = " << len << std::endl;
                         }
                     }
                     currentTiles.pop_back();
@@ -136,8 +131,8 @@ void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCou
                 if (tileCount + 1 < gMinTileCount)
                     backtrackTiles(currentTiles, newFilled, tileCount + 1, x, y);
                 if (DEBUG_MODE) {
-                    std::cout << "[DEBUG] Removing tile at (" << x << ", " << y
-                              << ") with side = " << len << std::endl;
+                    std::cout << "[DEBUG] Удаляем плитку в (" << x << ", " << y
+                              << ") со стороной = " << len << std::endl;
                 }
                 currentTiles.pop_back();
             }
@@ -159,12 +154,12 @@ void fillTiles() {
             Tile(initY, 0, initX)
     };
     if (DEBUG_MODE) {
-        std::cout << "[DEBUG] Initial placement:" << std::endl;
+        std::cout << "[DEBUG] Начальное размещение:" << std::endl;
         for (const auto &tile : initTiles) {
-            std::cout << "[DEBUG] Tile at (" << tile.posX << ", " << tile.posY
-                      << ") with side = " << tile.sideLength << std::endl;
+            std::cout << "[DEBUG] Плитка в (" << tile.posX << ", " << tile.posY
+                      << ") со стороной = " << tile.sideLength << std::endl;
         }
-        std::cout << "[DEBUG] Initial filled area = " << areaFilled << std::endl;
+        std::cout << "[DEBUG] Начальная заполненная площадь = " << areaFilled << std::endl;
     }
     backtrackTiles(initTiles, areaFilled, 3, initX, initY);
 }
