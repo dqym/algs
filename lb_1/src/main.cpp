@@ -26,7 +26,7 @@ int gUnitSize;               // единичный размер плитки
 int gMinTileCount;           // минимальное количество плиток
 std::vector<Tile> gOptimal;  // оптимальное расположение плиток
 
-bool DEBUG_MODE = false;
+bool DEBUG_MODE = true;
 
 // Функция нормализации сетки
 void adjustGridRatio() {
@@ -75,16 +75,6 @@ void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCou
                   << ", заполненная площадь = " << filledArea
                   << ", начальное X = " << startX << ", начальное Y = " << startY << std::endl;
     }
-    if (filledArea == gGridDim * gGridDim) {
-        if (tileCount < gMinTileCount) {
-            gMinTileCount = tileCount;
-            gOptimal = currentTiles;
-            if (DEBUG_MODE) {
-                std::cout << "[DEBUG] Найдена полная укладка с количеством плиток = " << tileCount << std::endl;
-            }
-        }
-        return;
-    }
 
     for (int x = startX; x < gGridDim; ++x) {
         for (int y = startY; y < gGridDim; ++y) {
@@ -92,9 +82,6 @@ void backtrackTiles(std::vector<Tile> &currentTiles, int filledArea, int tileCou
                 continue;
 
             int possibleSide = findMaxTileSize(currentTiles, x, y);
-            if (possibleSide <= 0)
-                continue;
-
             for (int len = possibleSide; len >= 1; --len) {
                 Tile newTile(x, y, len);
                 int newFilled = filledArea + len * len;
