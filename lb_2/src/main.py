@@ -158,7 +158,8 @@ def tsp_branch_and_bound(matrix, start=0):
         for v, edge_cost, lb in candidates:
             total_estimate = current_cost + edge_cost + lb
             debug_print(
-                f"Проверка: текущая стоимость={current_cost}, edge_cost={edge_cost}, lb={lb}, total_estimate={total_estimate}, best={best['cost']}")
+                f"Проверка: текущая стоимость={current_cost}, индекс вершины={v}, edge_cost={edge_cost}, lb={lb}, "
+                f"total_estimate={total_estimate}, best={best['cost']}")
             if total_estimate > best['cost']:
                 debug_print("Отсекаем ветку")
                 continue
