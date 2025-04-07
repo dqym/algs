@@ -2,7 +2,8 @@ DEBUG = False
 
 
 def vector_prefix(s):
-    print(f"\nСтроится префиксный вектор для строки: {s}")
+    if DEBUG:
+        print(f"\nСтроится префиксный вектор для строки: {s}")
     n = len(s)
     p = [0] * n
     j = 0

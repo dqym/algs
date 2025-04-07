@@ -2,7 +2,8 @@ DEBUG = False
 
 
 def vector_prefix(s):
-    print(f"\nСтроится префиксный вектор для строки: {s}")
+    if DEBUG:
+        print(f"\nСтроится префиксный вектор для строки: {s}")
     n = len(s)
     p = [0] * n
     j = 0
@@ -99,5 +100,4 @@ def cyclic_shift_check(A, B):
 if __name__ == "__main__":
     first_str = input()
     second_str = input()
-
     print(cyclic_shift_check(first_str, second_str))
