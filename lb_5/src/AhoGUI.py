@@ -75,7 +75,7 @@ class AhoGUI:
         try:
             matches, automaton = get_result(text, patterns)
 
-            self.result_output.insert(END, "\n".join(matches))
+            self.result_output.insert(END, "\n".join(map(str, matches)))
 
             image_path = AutomatonVisualizer.render_png(automaton)
             image = Image.open(image_path)

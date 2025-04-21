@@ -173,6 +173,8 @@ def main():
     if args.output == "console":
         run_console()
     else:
+        import main as _m
+        _m.DEBUG_MODE = args.debug
         from AhoGUI import AhoGUI, Tk
         root = Tk()
         AhoGUI(root)
